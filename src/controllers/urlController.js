@@ -46,18 +46,18 @@ const createURL = async function (req, res) {
                 });
 
             if (accessibleLink == false) {
-                return res.status(400).send({ status: false, message: "longurl is not accessible!!" });
+                return res.status(400).send({ status: false, message: "longurl is not accessible!!"  });
             }
 
             let cahcedUrlData = await GET_ASYNC(`${longUrl}`);
             if (cahcedUrlData) {
-                return res.status(400).send({ status: false, message: " longUrl Already Exists in cache" });
+                return res.status(200).send({ status: false, message: " longUrl Already Exists in cache" , data : JSON.parse(cahcedUrlData) });
             }
 
             const checkUrlInDB = await urlModel.findOne({ longUrl: longUrl }).select({ _id: 0, longUrl: 1, shortUrl: 1, urlCode: 1 })
             if (checkUrlInDB) {
                 await SET_ASYNC(`${checkUrlInDB.longUrl}`, JSON.stringify(checkUrlInDB), "EX", 20 * 60)
-                return res.status(400).send({ status: false, message: "URL is already Exists in DB" })
+                return res.status(200).send({ status: false, message: "URL is already Exists in DB" , data : checkUrlInDB})
             }
 
             let baseURL = "http://localhost:3000/"
@@ -115,4 +115,3 @@ let getUrl = async function (req, res) {
 
 module.exports.createURL = createURL
 module.exports.getUrl = getUrl
-

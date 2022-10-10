@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const app = express()
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+
 
 mongoose.connect("mongodb+srv://rahulravidas024:2iYJiS3c54qnkGXA@cluster0.emr6keu.mongodb.net/group64Database", {
     useNewUrlParser: true
